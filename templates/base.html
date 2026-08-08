@@ -1,0 +1,26 @@
+{# templates/base.html #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('main.index') }}">Home</a>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.create_article') }}">New Article</a>
+        <a href="{{ url_for('main.logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('main.login') }}">Login</a>
+    {% endif %}
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+{% block content %}{% endblock %}
+</body>
+</html>
