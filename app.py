@@ -30,6 +30,11 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = "main.login"
     
+    from models import User
+
+    def load_user(user_id):
+        return User.query.get((int(user_id)))
+    
     from routes import main
     app.register_blueprint(main)
     
