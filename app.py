@@ -12,14 +12,22 @@ def create_app():
     
     # Configuration — all secrets from environment variables
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-only-insecure-key")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-        "DATABASE_URL", "sqlite:///blog.db"
-    )
+    
+    db_url = os.environ.get("DATABASE_URL", "sqlite:///blog.db")
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+    
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "main.login"
+    
+    from models import User
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
     
     from routes import main
     app.register_blueprint(main)

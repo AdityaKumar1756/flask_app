@@ -1,14 +1,18 @@
 {# templates/index.html #}
 {% extends "base.html" %}
 {% block content %}
-<h1>Latest Articles</h1>
-{% for article in articles %}
-<article>
-    <h2><a href="{{ url_for('main.article_detail', slug=article.slug) }}">{{ article.title }}</a></h2>
-    <p>By {{ article.author.username }} — {{ article.published_at.strftime('%B %d, %Y') }}</p>
-    <p>{{ article.body[:200] }}...</p>
-</article>
-{% else %}
-<p>No articles yet.</p>
-{% endfor %}
+<h1>Library Book Sequence Scanner</h1>
+<p>Please read the following for understanding how this scanner works.</p>
+<hr>
+<h2>Naive Implementation (not ideal list)</h2>
+<p>This just takes the first number as a reference point, and adds numbers depending on whether they are bigger or not.
+    This is not the best, as it could be that the first number is the biggest number. This would lead to the rest being flagged, even though just moving the first book to the end will do the task.
+</p>
+<hr>
+<h2>Longest Increasing Subsequence (ideal list)</h2>
+<p>This looks at the largest subsequence of the list that is increasing, resulting in the minimum number of books being flagged.
+    The timing, however, is worse for this.
+</p>
+<hr><hr>
+<p>Please click on the link on the top to see how it works out along with the times.</p>
 {% endblock %}
